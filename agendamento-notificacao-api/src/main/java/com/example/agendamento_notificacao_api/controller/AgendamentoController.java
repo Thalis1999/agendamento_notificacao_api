@@ -1,13 +1,12 @@
-package com.example.agendamento_notificacao_api.controller.dto.out;
+package com.example.agendamento_notificacao_api.controller;
 
 import com.example.agendamento_notificacao_api.business.AgendamentoService;
 import com.example.agendamento_notificacao_api.controller.dto.in.AgendamentoRecord;
+import com.example.agendamento_notificacao_api.controller.dto.out.AgendamentoRecordOut;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,5 +18,10 @@ public class AgendamentoController {
     @PostMapping
     public ResponseEntity<AgendamentoRecordOut> gravarAgendamentos(@RequestBody AgendamentoRecord agendamento){
         return ResponseEntity.ok(agendamentoService.gravarAgendamento(agendamento));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<AgendamentoRecordOut> buscarAgendamentoPorId(@PathVariable("id") Long id) throws ChangeSetPersister.NotFoundException {
+        return ResponseEntity.ok(agendamentoService.buscarAgendamentosPorId(id));
     }
 }
