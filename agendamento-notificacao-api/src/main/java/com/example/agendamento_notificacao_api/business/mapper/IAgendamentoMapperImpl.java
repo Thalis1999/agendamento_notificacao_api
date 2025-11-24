@@ -4,13 +4,15 @@ import com.example.agendamento_notificacao_api.controller.dto.in.AgendamentoReco
 import com.example.agendamento_notificacao_api.controller.dto.out.AgendamentoRecordOut;
 import com.example.agendamento_notificacao_api.infrastructure.entities.Agendamento;
 import com.example.agendamento_notificacao_api.infrastructure.enums.StatusNotificacaoEnum;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-11-23T12:06:04-0300",
+    date = "2025-11-24T15:14:27-0300",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 25 (Oracle Corporation)"
 )
 @Component
@@ -43,17 +45,39 @@ public class IAgendamentoMapperImpl implements IAgendamentoMapper {
         String telefoneDestinatario = null;
         String mensagem = null;
         LocalDateTime dataHoraEnvio = null;
+        StatusNotificacaoEnum statusNotificacao = null;
 
         id = agendamento.getId();
         emailDestinatario = agendamento.getEmailDestinatario();
         telefoneDestinatario = agendamento.getTelefoneDestinatario();
         mensagem = agendamento.getMensagem();
         dataHoraEnvio = agendamento.getDataHoraEnvio();
+        statusNotificacao = agendamento.getStatusNotificacao();
 
-        StatusNotificacaoEnum statusNotificacaoEnum = null;
-
-        AgendamentoRecordOut agendamentoRecordOut = new AgendamentoRecordOut( id, emailDestinatario, telefoneDestinatario, mensagem, dataHoraEnvio, statusNotificacaoEnum );
+        AgendamentoRecordOut agendamentoRecordOut = new AgendamentoRecordOut( id, emailDestinatario, telefoneDestinatario, mensagem, dataHoraEnvio, statusNotificacao );
 
         return agendamentoRecordOut;
     }
-}
+
+    @Override
+    public Agendamento paraEntityCancelamento(Agendamento agendamento) {
+        if ( agendamento == null ) {
+            return null;
+        }
+
+        Agendamento.AgendamentoBuilder agendamento1 = Agendamento.builder();
+
+        agendamento1.id( agendamento.getId() );
+        agendamento1.emailDestinatario( agendamento.getEmailDestinatario() );
+        agendamento1.telefoneDestinatario( agendamento.getTelefoneDestinatario() );
+        agendamento1.dataHoraEnvio( agendamento.getDataHoraEnvio() );
+        agendamento1.dataHoraAgendamento( agendamento.getDataHoraAgendamento() );
+        agendamento1.mensagem( agendamento.getMensagem() );
+
+
+        agendamento1.dataHoraModificacao( LocalDateTime.now( ));
+            agendamento1.statusNotificacao(StatusNotificacaoEnum.CANCELADO);
+
+                return agendamento1.build();
+            }
+        }

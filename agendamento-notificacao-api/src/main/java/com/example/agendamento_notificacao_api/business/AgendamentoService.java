@@ -3,6 +3,7 @@ package com.example.agendamento_notificacao_api.business;
 import com.example.agendamento_notificacao_api.business.mapper.IAgendamentoMapper;
 import com.example.agendamento_notificacao_api.controller.dto.in.AgendamentoRecord;
 import com.example.agendamento_notificacao_api.controller.dto.out.AgendamentoRecordOut;
+import com.example.agendamento_notificacao_api.infrastructure.entities.Agendamento;
 import com.example.agendamento_notificacao_api.infrastructure.repositories.AgendamentoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -24,6 +25,13 @@ public class AgendamentoService {
     public AgendamentoRecordOut buscarAgendamentosPorId(Long id) throws ChangeSetPersister.NotFoundException {
         return agendamentoMapper.paraOut(repository.findById(id)
                 .orElseThrow(() -> new ChangeSetPersister.NotFoundException()));
+    }
+
+    public void cancelarAgendamento(Long id) throws ChangeSetPersister.NotFoundException {
+        Agendamento agendamento = repository.findById(id)
+                .orElseThrow(() -> new ChangeSetPersister.NotFoundException());
+        repository.save(
+                agendamentoMapper.paraEntityCancelamento(agendamento));
     }
 
 }

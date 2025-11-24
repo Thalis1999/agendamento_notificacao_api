@@ -24,4 +24,10 @@ public class AgendamentoController {
     public ResponseEntity<AgendamentoRecordOut> buscarAgendamentoPorId(@PathVariable("id") Long id) throws ChangeSetPersister.NotFoundException {
         return ResponseEntity.ok(agendamentoService.buscarAgendamentosPorId(id));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Void> cancelarAgendamento(@PathVariable("id") Long id) throws ChangeSetPersister.NotFoundException {
+        agendamentoService.cancelarAgendamento(id);
+        return ResponseEntity.accepted().build();
+    }
 }
